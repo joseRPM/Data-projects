@@ -8,7 +8,8 @@
 
 ## Descripción
 
-Implementación desde cero de una prueba de independencia Chi-Cuadrado en R, sin usar funciones de test integradas. El objetivo es determinar si existe una relación estadísticamente significativa entre el sexo y el rango etario de los clientes, a un nivel de significación del 1% (α = 0.01).
+Implementación from scratch de una prueba de independencia Chi-Cuadrado en R, sin usar funciones de test integradas. El objetivo es determinar si existe una relación estadísticamente significativa entre el sexo y el rango etario de los clientes, a un nivel de significación del 1% (α = 0.01).
+Este mini proyecto tiene como finalidad demostrar manejo de R así como de algunos conceptos de estadistica.
 
 ---
 

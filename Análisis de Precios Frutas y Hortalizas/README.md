@@ -11,6 +11,7 @@
 Análisis exploratorio y predictivo de precios mayoristas de productos frescos transados en los principales mercados del país. El dataset cubre regiones desde Arica y Parinacota hasta Los Lagos, con información de precios, volúmenes y características del producto comercializado.
 
 El proyecto abarca limpieza de datos, estandarización de unidades de medida, análisis de preguntas de negocio y modelamiento predictivo mediante regresión lineal.
+IMPORTANTE el modelo aplicado en este proyecto esta en proceso de cambio, elección de mejores features, un modelo mas complejo y construcción de graficos con información mas util (incluso la aplicación de tecnicas como cross-validation).
 
 ---
 
@@ -34,7 +35,7 @@ proyecto_01.ipynb
 └── Preguntas de análisis
     ├── P1: Variación del precio/kg de la acelga durante el año
     ├── P2: Distribución por región y correlación volumen–precio
-    └── P3: Predicción de precio con regresión lineal
+    └── P3: Predicción de precio con regresión lineal (en proceso de elegir un mejor modelo, features, ect.)
 ```
 
 ---
@@ -73,7 +74,7 @@ Se evaluaron tres modelos con dos enfoques de partición de datos:
 - Máscaras booleanas con `str.contains` para filtrado
 - Función personalizada con `re` (regex) para extracción y normalización de unidades
 - Validación de integridad de datos post-separación
-- Visualización con `plotly.express` (scatter interactivo, línea con `vrect`), `seaborn` (`regplot`) y `matplotlib`
+- Visualización con `plotly.express` (de forma experimental), `seaborn` (`regplot`) y `matplotlib`
 - Correlación de Pearson con `DataFrame.corr()`
 - Regresión lineal con `sklearn`: `LinearRegression`, `train_test_split`, `mean_absolute_error`, `r2_score`
 - Partición temporal manual con `sort_values` + `iloc`
