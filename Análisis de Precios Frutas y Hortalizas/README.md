@@ -74,10 +74,10 @@ Se evaluaron tres modelos con dos enfoques de partición de datos:
 - Máscaras booleanas con `str.contains` para filtrado
 - Función personalizada con `re` (regex) para extracción y normalización de unidades
 - Validación de integridad de datos post-separación
-- Visualización con `plotly.express` (de forma experimental), `seaborn` (`regplot`) y `matplotlib`
+- Visualización con `plotly.express` (de forma experimental), `seaborn` y `matplotlib`
 - Correlación de Pearson con `DataFrame.corr()`
 - Regresión lineal con `sklearn`: `LinearRegression`, `train_test_split`, `mean_absolute_error`, `r2_score`
-- Partición temporal manual con `sort_values` + `iloc`
+- Partición temporal manual con `sort_values`
 
 ---
 
