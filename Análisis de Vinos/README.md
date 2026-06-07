@@ -1,4 +1,4 @@
-#  Proyecto P-01 — Análisis de Vinos del Mundo
+#  Proyecto P-02 — Análisis de Vinos del Mundo
 
 **Stack:** MySQL · Power BI  
 **Base de datos:** `vino`  
