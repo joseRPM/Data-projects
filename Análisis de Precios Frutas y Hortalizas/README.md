@@ -1,7 +1,7 @@
 # Proyecto P-01 — Análisis de Precios Mayoristas de Frutas y Hortalizas
 
-**Stack:** Python · pandas · NumPy · Matplotlib · Seaborn · Plotly · Scikit-learn  
-**Fuente de datos:** [datos.gob.cl](https://datos.gob.cl) — Oficina de Estudios y Políticas Agrarias (ODEPA)  
+**Stack:** Python · pandas · NumPy · Matplotlib · Seaborn · Scikit-learn
+**Fuente de datos:** [datos.gob.cl](https://datos.gob.cl) — Oficina de Estudios y Políticas Agrarias (ODEPA)
 **Producto analizado:** Acelga · Año 2024
 
 ---
@@ -10,8 +10,7 @@
 
 Análisis exploratorio y predictivo de precios mayoristas de productos frescos transados en los principales mercados del país. El dataset cubre regiones desde Arica y Parinacota hasta Los Lagos, con información de precios, volúmenes y características del producto comercializado.
 
-El proyecto abarca limpieza de datos, estandarización de unidades de medida, análisis de preguntas de negocio y modelamiento predictivo mediante regresión lineal.
-IMPORTANTE el modelo aplicado en este proyecto esta en proceso de cambio, elección de mejores features, un modelo mas complejo y construcción de graficos con información mas util (incluso la aplicación de tecnicas como cross-validation).
+El proyecto abarca limpieza de datos, estandarización de unidades de medida, feature engineering (one-hot encoding de regiones y codificación numérica de calidad), análisis de preguntas de negocio y modelamiento predictivo mediante regresión lineal con validación cruzada.
 
 ---
 
@@ -27,15 +26,20 @@ proyecto_01.ipynb
 │
 ├── Estandarización de precios
 │   ├── Identificación de 149 unidades de medida distintas
-│   ├── Filtrado del 72.24% de datos expresados en kilogramos
+│   ├── Filtrado del 71.24% de datos expresados en kilogramos
 │   ├── Función extraer_kg() con regex para normalizar unidades
-│   ├── Separación en df_kg y df_no_kg
-│   └── Validación de persistencia de datos
+│   ├── Separación en df_kg y df_no_kg, con validación de persistencia de datos
+│   └── Cálculo de precio por kg
+│
+├── Feature engineering
+│   ├── Codificación numérica de la variable "Calidad"
+│   ├── One-hot encoding de regiones
+│   └── Selección y renombrado de columnas finales del dataset modelo
 │
 └── Preguntas de análisis
     ├── P1: Variación del precio/kg de la acelga durante el año
     ├── P2: Distribución por región y correlación volumen–precio
-    └── P3: Predicción de precio con regresión lineal (en proceso de elegir un mejor modelo, features, ect.)
+    └── P3: Predicción de precio con regresión lineal + cross-validation
 ```
 
 ---
@@ -44,27 +48,31 @@ proyecto_01.ipynb
 
 | Pregunta | Resultado |
 |---|---|
-| ¿Cómo varía el precio de la acelga en el año? | Precios estables en la primera mitad. Aumento y mayor dispersión entre agosto y diciembre, posiblemente por baja en la oferta |
-| ¿Qué regiones concentran mayor volumen? | Maule destaca en volumen individual. Coquimbo acumula múltiples registros de alto volumen |
-| ¿Existe correlación entre volumen y precio? | Correlación negativa moderada de **-0.51**: a mayor oferta, menor precio por kg |
-| ¿Es posible predecir el precio con regresión lineal? | No con precisión. MAE ≈ $150 (~23% del precio promedio). R² bajo en todos los modelos |
+| ¿Cómo varía el precio de la acelga en el año? | Precio y volumen muestran una relación inversa: en septiembre 2024, una caída del precio coincide con un aumento abrupto del volumen, seguido de recuperación del precio al disminuir el volumen. Patrón consistente con oferta y demanda |
+| ¿Qué regiones concentran mayor volumen? | La Región Metropolitana concentra por lejos el mayor volumen comercializado, lo que tiene sentido dado que ahí se encuentra la mayor parte de la población y centrales de abasto como Lo Valledor |
+| ¿Existe correlación entre volumen y precio? | Correlación de -0.152 (débil) considerando todos los productos juntos. Al mezclar productos con dinámicas propias de oferta/demanda, la relación se diluye |
+| ¿Es posible predecir el precio con regresión lineal? | Sí, con un modelo multivariable: **R² = 0.949**, MAE ≈ 504.91. Validación cruzada (5-fold): R² promedio = 0.936, desviación estándar = 0.032 |
 
 ---
 
-## Modelos de regresión lineal
+## Modelo de regresión lineal
 
-Se evaluaron tres modelos con dos enfoques de partición de datos:
+A diferencia de un enfoque univariable, el modelo final incorpora múltiples features construidas durante el feature engineering:
 
-| Modelo | Variables | Resultado |
-|---|---|---|
-| Modelo 1 | Solo tiempo (día del año) | R² bajo, poca capacidad explicativa |
-| Modelo 2 | Solo volumen | Mejor relación individual con el precio |
-| Modelo 3 | Tiempo + volumen | Mejora marginal respecto a los anteriores |
+- Calidad del producto (codificada numéricamente)
+- Kilogramos comercializados (kg_comercializado)
+- Volumen
+- Región de origen (one-hot encoding: RM, Arica, Coquimbo, Araucanía, Los Lagos, Valparaíso, Ñuble, Biobío, Maule)
 
-**Partición aleatoria** (`train_test_split`): MAE ≈ $150, R² bajo pero positivo.  
-**Partición temporal** (80% pasado / 20% futuro): R² negativo — el modelo no generaliza hacia datos futuros y predice peor que usar el promedio directamente.
+**Resultados (holdout 80/20, random_state=42):**
+- R² = 0.949 → el modelo explica el 94.9% de la variabilidad del precio
+- MAE = 504.91
 
-**Conclusión:** La regresión lineal con estas variables no es suficiente. El precio está influenciado por factores no capturados: calidad, origen, condiciones climáticas, logística. Se requieren variables adicionales o modelos más complejos (series de tiempo, árboles de decisión).
+**Validación cruzada (5-fold):**
+- R² promedio = 0.936
+- Desviación estándar = 0.032 → resultados estables, sin señales de sobreajuste
+
+**Importancia de variables (coeficientes):** el factor geográfico y el volumen de mercado dominan la fijación de precios. Pertenecer a la Región de Los Lagos eleva fuertemente el precio, mientras que la Región de Valparaíso tiene un efecto contrario.
 
 ---
 
@@ -74,10 +82,10 @@ Se evaluaron tres modelos con dos enfoques de partición de datos:
 - Máscaras booleanas con `str.contains` para filtrado
 - Función personalizada con `re` (regex) para extracción y normalización de unidades
 - Validación de integridad de datos post-separación
-- Visualización con `plotly.express` (de forma experimental), `seaborn` y `matplotlib`
-- Correlación de Pearson con `DataFrame.corr()`
-- Regresión lineal con `sklearn`: `LinearRegression`, `train_test_split`, `mean_absolute_error`, `r2_score`
-- Partición temporal manual con `sort_values`
+- Feature engineering: mapeo manual de categorías ordinales (`Calidad`) y `pd.get_dummies` para variables categóricas (`Region`)
+- Visualización con `seaborn` y `matplotlib` (gráficos de doble eje, barplots)
+- Correlación de Pearson con `Series.corr()`
+- Regresión lineal con `sklearn`: `LinearRegression`, `train_test_split`, `mean_absolute_error`, `r2_score`, `cross_val_score`
 
 ---
 
@@ -85,7 +93,7 @@ Se evaluaron tres modelos con dos enfoques de partición de datos:
 
 1. Instalar dependencias:
    ```bash
-   pip install pandas numpy matplotlib seaborn plotly scikit-learn
+   pip install pandas numpy matplotlib seaborn scikit-learn
    ```
 2. Descargar el dataset desde [datos.gob.cl](https://datos.gob.cl) (ODEPA — precios mayoristas 2024)
 3. Colocar el archivo CSV en el mismo directorio que el notebook con el nombre:
@@ -98,4 +106,4 @@ Se evaluaron tres modelos con dos enfoques de partición de datos:
 
 ## Conclusión principal
 
-La regresión lineal simple no logra predecir con precisión el precio mayorista de la acelga. La correlación negativa moderada entre volumen y precio es consistente con la lógica básica de oferta y demanda, pero el precio está determinado por múltiples factores no recogidos en el dataset. Un análisis más robusto requeriría incorporar variables como región, origen del producto, condiciones estacionales o modelos de series de tiempo.
+El precio mayorista de la cualquier producto del dataset responde a una dinámica de oferta y demanda: a lo largo del año se observa una relación inversa entre volumen y precio, y esta misma tendencia (aunque débil, -0.152, al considerar todos los productos) se mantiene al analizar el dataset completo. La Región Metropolitana concentra el mayor volumen comercializado, coherente con su rol como principal centro de consumo y distribución del país. Tomando en cuenta estos factores —volumen y región— como features de un modelo de regresión lineal, junto a calidad y kilogramos comercializados, es posible predecir el precio con alta precisión (R² = 0.949, MAE ≈ 505), con resultados estables bajo validación cruzada (R² promedio = 0.936, std = 0.032). En conjunto, los tres análisis muestran que el precio no depende de un factor aislado, sino de la interacción entre estacionalidad, volumen ofertado y ubicación geográfica del mercado.
