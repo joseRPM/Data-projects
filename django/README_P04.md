@@ -7,8 +7,8 @@
 
 ## Descripción
 
-API web construida con Django que implementa un CRUD completo sobre datos públicos,
-con sistema de autenticación de usuarios y despliegue en producción.
+API web construida con Django que implementa un CRUD completo,
+con sistema de autenticación de usuarios.
 
 Proyecto orientado a demostrar manejo del ciclo completo de desarrollo back-end:
 modelado de datos, vistas, autenticación y despliegue.
