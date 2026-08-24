@@ -18,3 +18,6 @@ to give the results a story to tell.
 This is a small exercise in R based on a university exam. Its purpose is simply to refresh my knowledge of how to use R.
 
 
+
+## Conclusions
+These projects have helped me gain a broader understanding of data handling. A possible future project could be building a data pipeline.
