@@ -32,6 +32,7 @@ to investigate which variables had the greatest impact on price variability.
 This project aimed to apply everything learned about databases. A wine dataset was used to practice SQL queries,
 as well as basic database modeling. As an additional step, the query results were exported to a data visualization tool (Power BI) 
 to give the results a story to tell.
+
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
 ![Power BI](https://img.shields.io/badge/Power_BI-F2C811?style=for-the-badge&logo=powerbi&logoColor=black)
 
