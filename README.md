@@ -15,7 +15,7 @@ Data-projects/
 ## Fruit and Vegetable Price Analysis
 In this project, i used annual data on fruit and vegetable production from the Chilean government's database.
 I performed exploratory data analysis, data cleaning, and feature engineering. also built a small linear regression model (machine learning)
-to investigate which variables had the greatest impact on price variability.
+to investigate which variables had the greatest impact on price variability[^1].
 > Currently, the analysis was performed on only one product, and some useful conclusions were drawn from the results. With additional information,
 > such as weather conditions or GDP during the production period, it could be possible to build a more robust model and obtain more accurate results.
 
@@ -44,3 +44,6 @@ This is a small exercise in R based on a university exam. Its purpose is simply 
 
 ## Conclusions
 These projects have helped me gain a broader understanding of data handling. A possible future project could be building a data pipeline.
+
+
+[^1]: "Python Data Science Handbook: Essential Tools for Working with Data". Was a reference and a incredible book to learn how to work with data and getting into machine learning (chapter five)
